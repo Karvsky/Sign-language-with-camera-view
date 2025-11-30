@@ -3,8 +3,9 @@ from tensorflow.keras import layers, models
 
 def cnns_model():
 
-    height = 150
-    width = 180
+    height = 100
+    width = 100
+    danse_info = 1024
 
     model = tf.keras.models.Sequential([
 
@@ -17,32 +18,18 @@ def cnns_model():
         layers.Conv2D(64, (3, 3), activation='relu', input_shape=(height, width, 1)),
         layers.MaxPooling2D(2, 2),
         layers.Conv2D(64, (3, 3), activation='relu', input_shape=(height, width, 1)),
-        layers.MaxPooling2D(2, 2),
-        layers.Conv2D(64, (3, 3), activation='relu', input_shape=(height, width, 1)),
+
 
         layers.Flatten(),
-        layers.Dense(1024, activation='relu'),
+        layers.Dense(danse_info, activation='relu'),
         layers.BatchNormalization(),
-        layers.Dense(1024, activation='relu'),
+        layers.Dense(danse_info, activation='relu'),
         layers.Dropout(0.3),
-        layers.BatchNormalization(),
-        layers.Dense(1024, activation='relu'),
-        layers.Dropout(0.4),
-        layers.BatchNormalization(),
-        layers.Dense(1024, activation='relu'),
-        layers.Dropout(0.4),
-        layers.BatchNormalization(),
-        layers.Dense(1024, activation='relu'),
-        layers.Dropout(0.3),
-        layers.BatchNormalization(),
-        layers.Dense(1024, activation='relu'),
-        layers.Dropout(0.4),
-        layers.BatchNormalization(),
-        layers.Dense(1024, activation='relu'),
-        layers.Dropout(0.3),
-        layers.BatchNormalization(),
-        layers.Dense(1024, activation='relu'),
-        layers.Dropout(0.4),
         layers.BatchNormalization(),
         layers.Dense(29, activation='softmax')
+
+
+        
     ])
+
+    return model
