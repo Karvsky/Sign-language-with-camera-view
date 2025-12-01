@@ -2,15 +2,13 @@ import cv2
 import mediapipe as mp
 import numpy as np
 import tensorflow as tf
-import math
 
-IMG_SIZE = 100         
-OFFSET = 40            
-MODEL_PATH = 'moj_model_migowy.h5' 
-class_names = ['A', 'B', 'C', 'D', 'del', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
-               'N', 'nothing', 'O', 'P', 'Q', 'R', 'S', 'space', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'] 
+IMG_HEIGHT = 150
+IMG_WIDTH = 130
+OFFSET = 40
+MODEL_PATH = 'moj_model_migowy.h5'
+class_names = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'del', 'nothing', 'space']
 
-print("Ładowanie modelu...")
 model = tf.keras.models.load_model(MODEL_PATH)
 
 mp_hands = mp.solutions.hands
@@ -24,7 +22,6 @@ while True:
     if not success: break
 
     imgOutput = img.copy()
-
     img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     results = hands.process(img_rgb)
     
@@ -33,7 +30,6 @@ while True:
             mp_draw.draw_landmarks(imgOutput, hand_lms, mp_hands.HAND_CONNECTIONS)
 
             h, w, c = img.shape
-            
             x_vals = [lm.x for lm in hand_lms.landmark]
             y_vals = [lm.y for lm in hand_lms.landmark]
 
@@ -48,13 +44,13 @@ while True:
             imgCrop = img[y1:y2, x1:x2]
 
             if imgCrop.shape[0] > 0 and imgCrop.shape[1] > 0:
-                
                 imgGray = cv2.cvtColor(imgCrop, cv2.COLOR_BGR2GRAY)
-
-                imgResize = cv2.resize(imgGray, (IMG_SIZE, IMG_SIZE))
+                imgResize = cv2.resize(imgGray, (IMG_WIDTH, IMG_HEIGHT))
                 
                 imgFinal = np.expand_dims(imgResize, axis=0) 
                 imgFinal = np.expand_dims(imgFinal, axis=-1) 
+
+                cv2.imshow("To widzi AI", imgResize)
 
                 prediction = model.predict(imgFinal, verbose=0)
                 index = np.argmax(prediction) 
@@ -64,8 +60,6 @@ while True:
                 cv2.rectangle(imgOutput, (x1, y1), (x2, y2), (255, 0, 255), 4)
                 cv2.putText(imgOutput, f'{label} {int(confidence*100)}%', 
                             (x1, y1 - 10), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 255), 2)
-
-                cv2.imshow("Widok AI", imgResize)
 
     cv2.imshow("Kamera", imgOutput)
     if cv2.waitKey(1) & 0xFF == ord('q'):
