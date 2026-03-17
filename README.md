@@ -34,17 +34,6 @@ A superior approach for future iterations would be to use **YOLO (You Only Look 
 
 The project requires the following libraries: `tensorflow`, `opencv-python`, `mediapipe`, `numpy`.
 
-### Windows PowerShell Setup
-To correctly run the scripts in a virtual environment (venv) on Windows, follow these steps in PowerShell:
-
-1.  Change the execution policy:
-    ```powershell
-    Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
-    ```
-2.  Activate the virtual environment:
-    ```powershell
-    .\venv\Scripts\activate
-    ```
 
 ## 🚀 Execution Instructions (Step-by-Step)
 
